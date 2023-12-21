@@ -1,6 +1,6 @@
 """
 This script retrieves the labels and URIs of the  concepts that are used
-as  of at least one article in the ISSA dataset.
+as  of at least one article in the dataset.
 The additional field 'count' gives the number of articles that have that concept and label as a .
 
 The result is used the auto-completion of user inputs on the search form.
