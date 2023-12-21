@@ -1,4 +1,4 @@
-# ISSA Visualization front-end application
+#  Visualization front-end application
 
 ## [CURRENT] 
 

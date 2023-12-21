@@ -268,21 +268,6 @@ router.get('/autoComplete/', (req, res) => {
  * Search for documents annotated with a set of  given by their URIs
  * @param {string} uri - URIs of the  to search, passed on the query string either as "uri=a,b,..." or "uri=a&uri=b&..."
  * @return {document} - output like this:
- * {
- *   "result": [
- *     {
- *       "document": "http://data-issa.cirad.fr/document/585171",
- *       "title": "The endless palm oil debate: Science-based solutions beyond controversies",
- *       "date": "2017",
- *       "publisher": "Modern Nutrition Today",
- *       "lang": "eng",
- *       "linkPDF": "http://agritrop.cirad.fr/585171/1/Rival%20_ModernNutritionToday%20_02_2017_engl.pdf",
- *       "authors": [
- *         "Alain Rival", "X Y"
- *       ]
- *     },
- *     ...
- * }
  */
 router.get('/searchDocuments/', (req, res) => {
     let uri = req.query.uri;

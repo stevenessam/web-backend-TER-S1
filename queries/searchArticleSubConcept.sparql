@@ -6,38 +6,29 @@ PREFIX oa:     <http://www.w3.org/ns/oa#>
 PREFIX prov:   <http://www.w3.org/ns/prov#>
 PREFIX schema: <http://schema.org/>
 PREFIX skosxl: <http://www.w3.org/2008/05/skos-xl#>
+prefix frbr:    <http://purl.org/vocab/frbr/core#>
 
-# This query retrieves the documents that are annotated with  concept {id} or any of its sub-concepts.
-# It keeps track of the actual concepts matched (concatenated in ?matchedEntities), these may contain either {id} itself of its sub-concepts.
 
-SELECT ?document ?title ?date ?publisher ?lang ?linkPDF (group_concat(distinct ?author, "$") as ?authors) (group_concat(distinct ?matchedEntity, "$$") as ?matchedEntities)
-FROM <http://data-issa.cirad.fr/graph/documents>
-FROM <http://data-issa.cirad.fr/graph/thematic->
-FROM <http://data-issa.cirad.fr/graph/annif->
-FROM <http://.fao.org/graph>
+SELECT ?document ?title ?date (group_concat(distinct ?author, "$") as ?authors) (group_concat(distinct ?matchedEntity, "$$") as ?matchedEntities)
+FROM <http://ns.inria.fr/d2kab/graph/wheatgenomicsslkg>
+From <http://ns.inria.fr/d2kab/ontology/wto/v3>
+from <http://purl.obolibrary.org/obo/ncbitaxon/ncbitaxon.owl>
 WHERE {
-    ?document a prov:Entity.
+   ?document a schema:ScholarlyArticle.
 
-    {   ?document ^oa:hasTarget [ oa:hasBody <{id}> ].
-        <{id}>
-            skosxl:prefLabel/skosxl:literalForm ?entityLabel.
-        FILTER langMatches(lang(?entityLabel), "en")
-        BIND(concat("{id}", '$', ?entityLabel) as ?matchedEntity)
-    } UNION {
-        ?document ^oa:hasTarget [ oa:hasBody ?entityUri ].
-        ?entityUri
-            (skos:broader|^agron:includes)+ <{id}>;
-            skosxl:prefLabel/skosxl:literalForm ?entityLabel.
-        FILTER langMatches(lang(?entityLabel), "en")
-        BIND(concat(?entityUri, '$', ?entityLabel) as ?matchedEntity)
+
+    {
+      ?a1 oa:hasTarget [ oa:hasSource ?source ];
+            oa:hasBody <{id}>.
+      ?source frbr:partOf+ ?document.
+      <{id}> skos:prefLabel ?entityLabel.
+      BIND(concat(<{id}>, '$', ?entityLabel) as ?matchedEntity)
     }
+    
 
     OPTIONAL { ?document dct:title ?title.}
-    OPTIONAL { ?document dce:creator ?author.}
+    OPTIONAL { ?document dct:creator ?author.}
     OPTIONAL { ?document dct:issued ?date.}
-    OPTIONAL { ?document schema:publication ?publisher.}
-    OPTIONAL { ?document dce:language ?lang.}
-    OPTIONAL { ?document schema:downloadUrl ?linkPDF. }
 
-} group by ?document ?title ?date ?publisher ?lang ?linkPDF
+} group by ?document ?title ?date
 limit 20000

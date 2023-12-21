@@ -29,7 +29,7 @@ WHERE {
             skosxl:prefLabel/skosxl:literalForm ?entityLabel.
         FILTER langMatches(lang(?entityLabel), "en")
         BIND(concat(?entityUri, '$', ?entityLabel) as ?matchedEntity)
-    }
+    }   
 
     OPTIONAL { ?document dct:title ?title.}
     OPTIONAL { ?document dce:creator ?author.}
