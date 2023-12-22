@@ -282,11 +282,11 @@ router.get('/searchDocuments/', (req, res) => {
         let lines = '';
         var i = 0;
 
-        let lineTpl = '     ?annotation oa:hasBody <{uri}>; oa:hasTarget [ oa:hasSource ?articleUriAbstract ] .{?articleUriAbstract frbr:partOf ?document.}union{?articleUriAbstract frbr:partOf ?var. ?var frbr:partOf  ?document.}';
+        let lineTpl = '?annotation' + i + ' oa:hasBody <{uri}>; oa:hasTarget [ oa:hasSource ?articleUriAbstract' + i + ' ] .?articleUriAbstract' + i + ' frbr:partOf+ ?document.';
 
         uris = uri.split(',');
         uris.forEach(_uri => {
-            let lineTpl = '     ?annotation' + i + ' oa:hasBody <{uri}>; oa:hasTarget [ oa:hasSource ?articleUriAbstract' + i + ' ] .{?articleUriAbstract' + i + ' frbr:partOf ?document.}union{?articleUriAbstract' + i + ' frbr:partOf ?var' + i + '. ?var' + i + ' frbr:partOf  ?document.}';
+            let lineTpl = '?annotation' + i + ' oa:hasBody <{uri}>; oa:hasTarget [ oa:hasSource ?articleUriAbstract' + i + ' ] .?articleUriAbstract' + i + ' frbr:partOf+ ?document.';
             lines += lineTpl.replaceAll("{uri}", _uri) + '\n';
             i = i + 1;
         })
