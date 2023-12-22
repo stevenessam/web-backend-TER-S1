@@ -42,7 +42,6 @@ function sortStrings(a, b) {
 
 /**
  * Split a string formatted like "URI$label$$URI$label$$..." into a document like
- * [ { "entityUri": "URI", "entityLabel": "label" }, { "entityUri": "URI", "entityLabel": "label" } ... ]
  *
  * @param {string} str - input string to process
  * @returns {array} - array of documents
@@ -61,21 +60,6 @@ function splitDollar(str) {
  * Get article metaData (title , date , articleType ... )  without the authors
  * @param {string} uri - URI of the document
  * @return {document} - The outputis shaped as in the example below:
- * {
- *   "result": [
- *     {
- *       "title": "Assessment of municipal opened landfill and its impact on environmental and human health in central Thailand",
- *       "date": "2019",
- *       "pub": "International Journal of Infectious Diseases",
- *       "license": "https://creativecommons.org/licenses/by/4.0/",
- *       "doi": "10.1016/j.ijid.2018.11.146",
- *       "source": "Agritrop-OAI2-API",
- *       "url": "http://agritrop.cirad.fr/592919/",
- *       "lang": "eng",
- *       "lang2": "http://id.loc.gov/vocabulary/iso639-1/en",
- *       "abs": "abstract...",
- *       "linkPDF": "http://agritrop.cirad.fr/592919/1/PIIS1201971218347258.pdf"
- * }]}
  */
 router.get('/getArticleMetadata/', (req, res) => {
     let articleUri = req.query.uri;

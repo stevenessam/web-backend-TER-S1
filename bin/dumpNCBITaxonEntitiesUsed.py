@@ -29,33 +29,33 @@ SELECT distinct ?entityUri ?entityLabel ?entityPrefLabel (count(?document) as ?c
 FROM NAMED <http://ns.inria.fr/d2kab/graph/wheatgenomicsslkg>
 FROM NAMED <http://purl.obolibrary.org/obo/ncbitaxon/ncbitaxon.owl>
 WHERE {
-
-  
     
-      {
+    {
     SELECT DISTINCT ?entityUri ?document 
-    WHERE {
-      GRAPH <http://ns.inria.fr/d2kab/graph/wheatgenomicsslkg> {
-        ?document a schema:ScholarlyArticle.
-        ?namedEntity oa:hasBody ?entityUri; oa:hasTarget [ oa:hasSource ?partOfArticle ] .
-        ?partOfArticle frbr:partOf+ ?document.
-      }
+    WHERE 
+    {
+        GRAPH <http://ns.inria.fr/d2kab/graph/wheatgenomicsslkg> {
+            ?document a schema:ScholarlyArticle.
+            ?namedEntity oa:hasBody ?entityUri; oa:hasTarget [ oa:hasSource ?partOfArticle ] .
+            ?partOfArticle frbr:partOf+ ?document.
+            }
+        }
     }
-  }
-     
 
-  { GRAPH <http://purl.obolibrary.org/obo/ncbitaxon/ncbitaxon.owl> {
-      {
-          ?entityUri rdfs:label ?entityLabel.
-      } union {
-          ?entityUri <http://www.geneontology.org/formats/oboInOwl#hasExactSynonym> ?entityLabel; rdfs:label ?entityPrefLabel
-      }
-      bind("NCBITaxon" as ?source)
-  }}
+    { 
+        GRAPH <http://purl.obolibrary.org/obo/ncbitaxon/ncbitaxon.owl> {
+        {
+            ?entityUri rdfs:label ?entityLabel.
+        } union {
+            ?entityUri <http://www.geneontology.org/formats/oboInOwl#hasExactSynonym> ?entityLabel; rdfs:label ?entityPrefLabel
+        }
+        bind("NCBITaxon" as ?source)
+    }
+}
 
 
 
-  }      group by ?entityUri ?entityLabel ?entityPrefLabel ?source
+}      group by ?entityUri ?entityLabel ?entityPrefLabel ?source
 offset %(offset)s
 limit %(limit)s
 '''

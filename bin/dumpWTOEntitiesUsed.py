@@ -54,9 +54,7 @@ WHERE {
       bind("WTO" as ?source)
     }
   }
-}
-
-     group by ?entityUri ?entityLabel ?entityPrefLabel ?source
+} group by ?entityUri ?entityLabel ?entityPrefLabel ?source
 offset %(offset)s
 limit %(limit)s
 '''

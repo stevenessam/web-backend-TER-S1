@@ -1,10 +1,7 @@
-PREFIX bibo:   <http://purl.org/ontology/bibo/>
 PREFIX dct:    <http://purl.org/dc/terms/>
-PREFIX dce:    <http://purl.org/dc/elements/1.1/>
 PREFIX oa:     <http://www.w3.org/ns/oa#>
-PREFIX prov:   <http://www.w3.org/ns/prov#>
+prefix frbr:    <http://purl.org/vocab/frbr/core#>
 PREFIX schema: <http://schema.org/>
-PREFIX frbr:   <http://purl.org/vocab/frbr/core#>
 
 SELECT ?document ?title ?date (group_concat(distinct ?author, "$") as ?authors)
 
@@ -12,12 +9,11 @@ FROM <http://ns.inria.fr/d2kab/graph/wheatgenomicsslkg>
 WHERE {
 ?document a schema:ScholarlyArticle.
 
-
 {triples}
 
-    OPTIONAL { ?document dct:title ?title.FILTER isLiteral(?title)}
-    OPTIONAL { ?document dct:creator ?author.}
-    OPTIONAL { ?document dct:issued ?date.}
+OPTIONAL { ?document dct:title ?title.FILTER isLiteral(?title)}
+OPTIONAL { ?document dct:creator ?author.}
+OPTIONAL { ?document dct:issued ?date.}
 
 } group by ?document ?title ?date 
 limit 20000
