@@ -330,28 +330,6 @@ router.get('/searchDocuments/', (req, res) => {
  *
  * @param {string} uri - URIs of the  to search, passed on the query string either as "uri=a,b,..." or "uri=a&uri=b&..."
  * @return {document} - output like this:
- *
- * {
- *   "result": [
- *     {
- *       "document": "http://data-issa.cirad.fr/document/601515",
- *       "title": "Transformation of coffee-growing across Latin America",
- *       "date": "2022",
- *       "publisher": "En transition vers un monde viable",
- *       "lang": "eng",
- *       "linkPDF": "http://agritrop.cirad.fr/601515/1/vivian.pdf",
- *       "authors": [
- *         "Armbrecht, Inge", "Avelino, Jacques", "Barrera, Juan Francisco"
- *       ],
- *       "matchedEntities": [{
- *           "entityUri": "http://aims.fao.org/aos/entitiesJson/c_33561",
- *           "entityLabel": "sustainable agriculture"
- *         },
- *         ...
- *       ]
- *     },
- *     ...
- * }
  */
 
 router.get('/searchDocumentsSubConcept/', async (req, res) => {
@@ -469,28 +447,6 @@ function getSourceFromJson(uri) {
  *
  * @param {string} uri - URIs of the  to search, passed on the query string either as "uri=a,b,..." or "uri=a&uri=b&..."
  * @return {document} - output like this:
- *
- * {
- *   "result": [
- *     {
- *       "document": "http://data-issa.cirad.fr/document/601515",
- *       "title": "Transformation of coffee-growing across Latin America",
- *       "date": "2022",
- *       "publisher": "En transition vers un monde viable",
- *       "lang": "eng",
- *       "linkPDF": "http://agritrop.cirad.fr/601515/1/vivian.pdf",
- *       "authors": [
- *         "Armbrecht, Inge", "Avelino, Jacques", "Barrera, Juan Francisco"
- *       ],
- *       "matchedEntities": [{
- *           "entityUri": "http://aims.fao.org/aos/entitiesJson/c_33561",
- *           "entityLabel": "sustainable agriculture"
- *         },
- *         ...
- *       ]
- *     },
- *     ...
- * }
  */
 router.get('/searchDocumentsRelated/', (req, res) => {
     let uri = req.query.uri;
