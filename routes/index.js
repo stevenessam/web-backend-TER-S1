@@ -170,38 +170,6 @@ router.get('/getAbstractNamedEntities/', (req, res) => {
 });
 
 
-/**
- * Get the geographical named entities whatever the article part
- * @param {string} uri - URI of the document
- */
-router.get('/getGeographicNamedEntities/', (req, res) => {
-    let articleUri = req.query.uri;
-    log.info('getGeographicNamedEntities - uri: ' + articleUri);
-    let query = readTemplate("getGeographicNamedEntities.sparql", articleUri);
-    if (log.isDebugEnabled()) {
-        log.debug('getGeographicNamedEntities - Will submit SPARQL query: \n' + query);
-    }
-
-    (async () => {
-        let result;
-        let opts = { method: 'POST' };
-        try {
-            result = await d3.sparql(process.env.SEMANTIC_INDEX_SPARQL_ENDPOINT, query, opts).then((data) => {
-                if (log.isTraceEnabled()) {
-                    log.trace('getGeographicalNamedEntities - SPARQL response: ');
-                    data.forEach(res => log.trace(res));
-                }
-                return data;
-            }).then(res => res);
-
-        } catch (err) {
-            log.error('getGeographicalNamedEntities error: ' + err);
-            result = err;
-        }
-        res.status(200).json({ result });
-    })()
-});
-
 
 
 /**
@@ -209,12 +177,6 @@ router.get('/getGeographicNamedEntities/', (req, res) => {
  *
  * @param {string} input - first characters entered by the use
  * @return {document} - The output is a JSON array whose documents are shaped as in the example below:
- *     {
- *         "entityUri": "http://aims.fao.org/aos/entitiesJson/c_4459",
- *         "entityLabel": "Luffa cylindrica",
- *         "entityPrefLabel": "Luffa aegyptica",
- *         "count": "1"
- *     }
  * entityPrefLabel is optional, it gives the preferred label in case entityLabel is not the preferred label.
  * "Count" is the number of documents in the knowledge base that are assigned the  with this URI/label.
  */
