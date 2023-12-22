@@ -7,7 +7,8 @@ FROM <http://ns.inria.fr/d2kab/graph/wheatgenomicsslkg>
 WHERE {
 
     OPTIONAL { <{id}> dct:title ?title.
-     FILTER isLiteral(?title)}
+     FILTER isLiteral(?title)
+     }
     OPTIONAL { <{id}> dct:issued ?date.}    
     OPTIONAL { <{id}> dct:source ?pub.}
     OPTIONAL { <{id}> dct:language ?lang.}
