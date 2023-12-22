@@ -370,10 +370,9 @@ router.get('/searchDocumentsSubConcept/', async (req, res) => {
             // Get the source from dumpEntities.json for the current _uri
             let source = getSourceFromJson(_uri);
 
-            // Log for debugging
+
             console.log("Source for uri:", source);
 
-            // Use a switch statement to determine the appropriate SPARQL query template based on the extracted source
             let query;
             switch (source) {
                 case "NCBITaxon":
@@ -382,11 +381,10 @@ router.get('/searchDocumentsSubConcept/', async (req, res) => {
                 case "WTO":
                     query = readTemplate("searchArticleSubConceptWTO.sparql", _uri);
                     break;
-                // Add more cases as needed for other sources
 
                 default:
-                    query = readTemplate("searchArticleSubConceptNCBI.sparql", _uri);
-                    break;
+                    console.warn(`Unknown source for uri ${_uri}: ${source}`);
+                    return;
             }
 
             if (log.isDebugEnabled()) {
