@@ -12,14 +12,15 @@ import json
 import math
 
 endpoint = "http://d2kab.i3s.unice.fr/sparql"
-limit = 3834
-totalResults = 3834
+limit = 3833
+totalResults = 3833
 
 prefixes = '''
 PREFIX oa:     <http://www.w3.org/ns/oa#>
 PREFIX skos:   <http://www.w3.org/2004/02/skos/core#>
 prefix frbr:    <http://purl.org/vocab/frbr/core#>
 prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX schema: <http://schema.org/>
 
 '''
 
@@ -35,8 +36,9 @@ WHERE {
     SELECT DISTINCT ?entityUri ?document 
     WHERE {
       GRAPH <http://ns.inria.fr/d2kab/graph/wheatgenomicsslkg> {
+        ?document a schema:ScholarlyArticle.
         ?namedEntity oa:hasBody ?entityUri; oa:hasTarget [ oa:hasSource ?partOfArticle ] .
-        ?partOfArticle frbr:partOf ?document.
+        ?partOfArticle frbr:partOf+ ?document.
       }
     }
   }
@@ -96,7 +98,7 @@ if __name__ == '__main__':
         print("Formatting the JSON output...")
         results_json = json.dumps(output, indent=4)
         print("Writing the output to JSON file...")
-        with open(f"D:/Scolarite/University/UCA/Project DS4H/Etape 2 Projet/web-backend/data/dumpEntitiesNCBITaxon.json", 'w', encoding="utf-8") as f:
+        with open(f"data/dumpEntitiesNCBITaxon.json", 'w', encoding="utf-8") as f:
             f.write(results_json)
 
     except Exception as e:

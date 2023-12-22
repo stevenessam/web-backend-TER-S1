@@ -23,10 +23,21 @@ WHERE {
       ?source frbr:partOf+ ?document.
       <{id}> skos:prefLabel ?entityLabel.
       BIND(concat(<{id}>, '$', ?entityLabel) as ?matchedEntity)
+	}UNION {
+      ?a1 oa:hasTarget [ oa:hasSource ?source ];
+          oa:hasBody ?entityUri.
+      ?source frbr:partOf+ ?document.
+
+      ?entityUri rdfs:subClassOf* <{id}>;
+                 rdfs:label ?entityLabel.
+
+        BIND(concat(?entityUri, '$', ?entityLabel) as ?matchedEntity)
     }
+
+       
     
 
-    OPTIONAL { ?document dct:title ?title.}
+    OPTIONAL { ?document dct:title ?title.FILTER isLiteral(?title)}
     OPTIONAL { ?document dct:creator ?author.}
     OPTIONAL { ?document dct:issued ?date.}
 

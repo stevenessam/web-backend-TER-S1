@@ -38,7 +38,7 @@ if __name__ == "__main__":
     input_files = [os.path.join(path, file_name) for file_name in file_names]
 
     # Specify the destination folder and the output file name
-    destination_folder = 'D:/Scolarite/University/UCA/Project DS4H/Etape 2 Projet/web-backend/data'
+    destination_folder = 'data'
     output_file = 'dumpEntities.json'
 
     concatenate_json_files(input_files, destination_folder, output_file)
