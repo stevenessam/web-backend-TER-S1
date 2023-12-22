@@ -28,7 +28,7 @@ def concatenate_json_files(file_paths, output_folder, output_file):
 if __name__ == "__main__":
 
     # Replace the path
-    path = 'D:/Scolarite/University/UCA/Project DS4H/Etape 2 Projet/web-backend/data'
+    path = 'data'
 
     # List of corrected file names
     file_names = ['dumpEntitiesGeneVariety.json',

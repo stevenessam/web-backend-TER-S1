@@ -353,7 +353,8 @@ router.get('/searchDocuments/', (req, res) => {
  *     ...
  * }
  */
-router.get('/searchDocumentsSubConcept/', (req, res) => {
+
+router.get('/searchDocumentsSubConcept/', async (req, res) => {
     let uri = req.query.uri;
     log.info('searchDocumentsSubConcept - uri: [' + uri + ']');
 
@@ -366,7 +367,28 @@ router.get('/searchDocumentsSubConcept/', (req, res) => {
         let uris = uri.split(',');
         let promises = [];
         uris.forEach(_uri => {
-            let query = readTemplate("searchArticleSubConcept.sparql", _uri);
+            // Get the source from dumpEntities.json for the current _uri
+            let source = getSourceFromJson(_uri);
+
+            // Log for debugging
+            console.log("Source for uri:", source);
+
+            // Use a switch statement to determine the appropriate SPARQL query template based on the extracted source
+            let query;
+            switch (source) {
+                case "NCBITaxon":
+                    query = readTemplate("searchArticleSubConceptNCBI.sparql", _uri);
+                    break;
+                case "WTO":
+                    query = readTemplate("searchArticleSubConceptWTO.sparql", _uri);
+                    break;
+                // Add more cases as needed for other sources
+
+                default:
+                    query = readTemplate("searchArticleSubConceptNCBI.sparql", _uri);
+                    break;
+            }
+
             if (log.isDebugEnabled()) {
                 log.debug('searchDocumentsSubConcept - Will submit SPARQL query: \n' + query);
             }
@@ -386,7 +408,7 @@ router.get('/searchDocumentsSubConcept/', (req, res) => {
                 return _result;
             })();
             promises.push(_promise);
-        })
+        });
 
         // Wait for all the responses (promises) and compute the intersection of all of them based on the document URIs
         let joinedResults = [];
@@ -429,6 +451,20 @@ router.get('/searchDocumentsSubConcept/', (req, res) => {
     }
 });
 
+// Implement a function to get source from dumpEntities.json based on URI
+function getSourceFromJson(uri) {
+    // Replace this logic with your actual implementation to read and return the source from dumpEntities.json
+    // This is a simplified example; you should adjust it according to your data structure
+    try {
+        const data = fs.readFileSync('./data/dumpEntities.json', 'utf8');
+        const dumpEntities = JSON.parse(data);
+        let entityData = dumpEntities.find(data => uri.includes(data.entityUri));
+        return entityData ? entityData.source : "Unknown";
+    } catch (err) {
+        console.error('Error reading dumpEntities.json: ' + err);
+        return "Unknown";
+    }
+}
 
 /**
  * Search for documents that are annotated with a set of entitiesJson concepts {id} or any related concept or any concept related to their sub-concepts.

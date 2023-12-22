@@ -12,32 +12,24 @@ prefix frbr:    <http://purl.org/vocab/frbr/core#>
 SELECT ?document ?title ?date (group_concat(distinct ?author, "$") as ?authors) (group_concat(distinct ?matchedEntity, "$$") as ?matchedEntities)
 FROM <http://ns.inria.fr/d2kab/graph/wheatgenomicsslkg>
 From <http://ns.inria.fr/d2kab/ontology/wto/v3>
-from <http://purl.obolibrary.org/obo/ncbitaxon/ncbitaxon.owl>
 WHERE {
    ?document a schema:ScholarlyArticle.
 
-
-    {
-      ?a1 oa:hasTarget [ oa:hasSource ?source ];
-            oa:hasBody <{id}>.
-      ?source frbr:partOf+ ?document.
-      <{id}> skos:prefLabel ?entityLabel.
-      BIND(concat(<{id}>, '$', ?entityLabel) as ?matchedEntity)
-	}UNION {
+   
       ?a1 oa:hasTarget [ oa:hasSource ?source ];
           oa:hasBody ?entityUri.
       ?source frbr:partOf+ ?document.
-
-      ?entityUri rdfs:subClassOf* <{id}>;
-                 rdfs:label ?entityLabel.
-
-        BIND(concat(?entityUri, '$', ?entityLabel) as ?matchedEntity)
-    }
-
-       
+        {
+            ?entityUri rdfs:subClassOf* <{id}>;
+                         rdfs:label ?entityLabel.
+        } union {
+    		?entityUri rdf:type/rdfs:subClassOf* <{id}>;
+                           skos:prefLabel ?entityLabel.
+		}
     
-
-    OPTIONAL { ?document dct:title ?title.FILTER isLiteral(?title)}
+        BIND(concat(?entityUri, '$', ?entityLabel) as ?matchedEntity)
+    
+    OPTIONAL { ?document dct:title ?title. FILTER isLiteral(?title)}
     OPTIONAL { ?document dct:creator ?author.}
     OPTIONAL { ?document dct:issued ?date.}
 
